@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using static System.Console;
@@ -28,16 +29,19 @@ namespace SnakeGameConsole
             SetWindowSize(ScreenWidth, ScreenHeight + 1);
             SetBufferSize(ScreenWidth, ScreenHeight + 1);
 
+            Player player = new Player();
+
             while (true)
             {
-                StarGame();
+                GameInit(player);
                 Thread.Sleep(1000);
                 ReadKey();
             }
         }
 
-        static void StarGame()
+        static void GameInit(Player player)
         {
+
             Clear();
 
             DrawBorder();
@@ -51,6 +55,8 @@ namespace SnakeGameConsole
 
             int score = 0;
             int lags = 0;
+
+            DrawStatusbar(score, player);
 
             Stopwatch sw = new Stopwatch();
 
@@ -77,7 +83,11 @@ namespace SnakeGameConsole
 
                     score++;
 
+                    player.UpdateScore(score);
+
                     Task.Run(() => Beep(1200, 200));
+
+                    DrawStatusbar(score, player);
                 }
 
                 else
@@ -92,6 +102,8 @@ namespace SnakeGameConsole
 
                 lags = (int)sw.ElapsedMilliseconds;
             }
+
+            if (score >= player.MaxScore) player.PlayerSave();
 
             Clear();
             ForegroundColor = ConsoleColor.Cyan;
@@ -150,6 +162,12 @@ namespace SnakeGameConsole
                 new Pixel(0, i, BorderColor).Draw();
                 new Pixel(MapWidth - 1, i, BorderColor).Draw();
             }
+        }
+        static void DrawStatusbar(int score, Player player)
+        {
+            SetCursorPosition(0, 0);
+            ForegroundColor = ConsoleColor.Cyan;
+            Write($"Текущий счёт: {score}\t\tМаксимальный счёт: {player.MaxScore}");
         }
     }
 }
