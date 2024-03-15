@@ -18,6 +18,7 @@ namespace SnakeGameConsole
 
         public void PlayerSave()
         {
+            if (!Directory.Exists("data")) Directory.CreateDirectory("data"); 
             using (var file = new FileStream("data\\player.json", FileMode.OpenOrCreate))
             {
                 JsonPlayer.WriteObject(file, this);
@@ -25,6 +26,7 @@ namespace SnakeGameConsole
         }
         public void PlayerUpdate()
         {
+            if (!Directory.Exists("data")) Directory.CreateDirectory("data");
             using (var file = new FileStream("data\\player.json", FileMode.OpenOrCreate))
             {
                 try
