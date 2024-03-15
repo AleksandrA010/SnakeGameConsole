@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using static System.Console;
@@ -28,6 +27,8 @@ namespace SnakeGameConsole
             CursorVisible = false;
             SetWindowSize(ScreenWidth, ScreenHeight + 1);
             SetBufferSize(ScreenWidth, ScreenHeight + 1);
+
+            DrawStartMenu();
 
             Player player = new Player();
 
@@ -107,10 +108,13 @@ namespace SnakeGameConsole
 
             Clear();
             ForegroundColor = ConsoleColor.Cyan;
-            string strEnd = $"Игра окончена! Ваш счёт — {score}";
+            string strEnd1 = $"Игра окончена! Ваш счёт — {score}";
             Task.Run(() => Beep(200, 600));
-            SetCursorPosition((WindowWidth - strEnd.Length) / 2, WindowHeight / 2 - 1);
-            Write(strEnd);
+            SetCursorPosition((WindowWidth - strEnd1.Length) / 2, WindowHeight / 2 - 3);
+            Write(strEnd1);
+            string strEnd2 = $"Для рестарта нажмите на любую клавишу...";
+            SetCursorPosition((WindowWidth - strEnd2.Length) / 2, WindowHeight / 2 - 2);
+            Write(strEnd2);
         }
         static Direction ReadMovement(Direction currentDirection)
         {
@@ -168,6 +172,27 @@ namespace SnakeGameConsole
             SetCursorPosition(0, 0);
             ForegroundColor = ConsoleColor.Cyan;
             Write($"Текущий счёт: {score}\t\tМаксимальный счёт: {player.MaxScore}");
+        }
+        static void DrawStartMenu()
+        {
+            ForegroundColor = ConsoleColor.Cyan;
+            string strStart1 = "Добро пожаловать в игру змейка!";
+            string strStart2 = "Перед началом игры вы можете настроить шрифт\\размер консоли.";
+            string strStart3 = "Для настройки перейдите в свойства\\шрифты.";
+            string strStart4 = "Один из хороших вариантов — это точечный, 12 X 16";
+            string strStart5 = "Для продолжения нажмите на любую клавишу...";
+            SetCursorPosition((WindowWidth - strStart1.Length) / 2, WindowHeight / 2 - 4);
+            Write(strStart1);
+            SetCursorPosition((WindowWidth - strStart2.Length) / 2, WindowHeight / 2 - 2);
+            Write(strStart2);
+            SetCursorPosition((WindowWidth - strStart3.Length) / 2, WindowHeight / 2 - 1);
+            Write(strStart3);
+            SetCursorPosition((WindowWidth - strStart4.Length) / 2, WindowHeight / 2);
+            Write(strStart4);
+            SetCursorPosition((WindowWidth - strStart4.Length) / 2  + 4, WindowHeight / 2 + 2);
+            Write(strStart5);
+            ReadKey();
+            Clear();
         }
     }
 }
